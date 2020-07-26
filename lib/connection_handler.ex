@@ -2,7 +2,7 @@ defmodule ConnectionHandler do
     use GenServer
 
     @conf Application.get_env :discord_lite_server, :network
-    def start_link do
+    def start_link _ do
         ip = @conf[:ip] || {127,0,0,1}
         port = @conf[:port] || 11000
         GenServer.start_link(__MODULE__, [ip, port], name: __MODULE__)

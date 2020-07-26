@@ -6,7 +6,6 @@ defmodule MainServer do
     end
 
     def init [] do
-        ConnectionHandler.start_link
         {:ok, %{clients: []}}
     end
 
