@@ -14,7 +14,7 @@ defmodule ClientServer do
 
     def handle_info({:send_data, from, data}, state) do
         if from != state.port do
-            Process.send(state.audio_pid, {:send_data, data}, [])            
+            Process.send(state.audio_pid, {:send_data, from, data}, [])            
         end
         {:noreply, state}
     end
