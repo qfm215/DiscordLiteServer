@@ -14,7 +14,7 @@ defmodule AudioServer do
   
     def handle_info({:send_data, from, data}, state) do
         if (state.client_address) do
-            :gen_udp.send(state.socket, state.client_address, state.client_port, <<from::little-signed-32>> <> data)            
+            :gen_udp.send(state.socket, state.client_address, state.client_port, <<from::little-signed-32>> <> data)
         end
         {:noreply, state}
     end
