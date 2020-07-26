@@ -9,12 +9,12 @@ defmodule AudioServer do
   
     def init [ip, port] do
       {:ok, socket} = :gen_udp.open(port, [:binary, active: true, ip: ip])
-      {:ok, %{socket: socket, client_address: nil, port: port}}
+      {:ok, %{socket: socket, client_address: nil, client_port: nil, port: port}}
     end
   
     def handle_info({:send_data, data}, state) do
         if (state.client_address) do
-            :gen_udp.send(state.socket, state.client_address, state.port, <<state.port::little-signed-32>> <> data)            
+            :gen_udp.send(state.socket, state.client_address, state.client_port, <<state.port::little-signed-32>> <> data)            
         end
         {:noreply, state}
     end
@@ -25,10 +25,10 @@ defmodule AudioServer do
         {:stop, :normal, nil}
     end
   
-    def handle_info({:udp, _socket, address, _port, data}, state) do
+    def handle_info({:udp, _socket, address, port, data}, state) do
         GenServer.cast(MainServer, {:send_everyone, state.port, data})
         if (!state.client_address) do
-            {:noreply, %{state | client_address: address}}
+            {:noreply, %{state | client_address: address, client_port: port}}
         else
             {:noreply, state}
         end
