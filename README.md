@@ -1,6 +1,6 @@
 # DiscordLiteServer
 
-**TODO: Add description**
+Server side app for DiscordLite (Elixir version with udp and tcp sockets)
 
 ## Installation
 
