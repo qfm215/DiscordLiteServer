@@ -23,8 +23,8 @@ defmodule MainServer do
         {:noreply, %{state | clients: [pid|state.clients]}}
     end
 
-    def handle_cast({:kill_client, pid}, state) do
-        IO.inspect("Killing client")
+    def handle_cast({:remove_client, pid}, state) do
+        IO.inspect("Removing client")
         IO.inspect(state.clients |> List.delete(pid))
         {:noreply, %{state | clients: state.clients |> List.delete(pid)}}
     end
