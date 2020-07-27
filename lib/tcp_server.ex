@@ -6,7 +6,7 @@ defmodule TcpServer do
     end
 
     def init [ip,port] do
-        Process.send(self(), :start_listening, [])
+        send(self(), :start_listening)
         {:ok, %{ip: ip,port: port}}
     end
 

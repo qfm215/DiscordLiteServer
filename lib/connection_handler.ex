@@ -10,13 +10,13 @@ defmodule ConnectionHandler do
 
     def init [ip, port] do
         {:ok, listen_socket}= :gen_tcp.listen(port, [:binary,{:packet, 0}, {:active, true}, {:ip, ip}, {:reuseaddr, true}])
-        Process.send(self(), :start_accepting, [])
+        send(self(), :start_accepting)
         {:ok, %{listen_socket: listen_socket, current_port: port + 1}}
     end
 
     def handle_info(:start_accepting, state) do
         {:ok, client_pid} = ClientServer.start_link(state.current_port, state.listen_socket)
-        Process.send(self(), :start_accepting, [])
+        send(self(), :start_accepting)
         GenServer.cast(MainServer, {:add_client, client_pid})
         {:noreply, %{state | current_port: state.current_port + 1}}
     end

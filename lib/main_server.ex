@@ -29,9 +29,9 @@ defmodule MainServer do
         {:noreply, %{state | clients: state.clients |> List.delete(pid)}}
     end
 
-    def handle_cast({:send_everyone, from, data}, state) do
+    def handle_info({:send_everyone, from, data}, state) do
         state.clients |> Enum.each(fn client ->
-            Process.send(client, {:send_data, from, data}, [])
+            send(client, {:send_data, from, data})
         end)
         {:noreply, state}
     end
