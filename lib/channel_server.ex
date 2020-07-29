@@ -1,4 +1,4 @@
-defmodule MainServer do
+defmodule ChannelServer do
     use GenServer
 
     def start_link _ do

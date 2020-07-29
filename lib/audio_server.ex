@@ -22,7 +22,7 @@ defmodule AudioServer do
     end
 
     def handle_info({:udp, _socket, address, port, data}, state) do
-        send(MainServer, {:send_everyone, state.port, data})
+        send(ChannelServer, {:send_everyone, state.port, data})
         if (Map.has_key?(state, :client_address)) do
             {:noreply, state}
         else

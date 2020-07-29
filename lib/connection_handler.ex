@@ -17,7 +17,7 @@ defmodule ConnectionHandler do
     def handle_info(:start_accepting, state) do
         {:ok, client_pid} = ClientServer.start_link(state.current_port, state.listen_socket)
         send(self(), :start_accepting)
-        GenServer.cast(MainServer, {:add_client, client_pid})
+        GenServer.cast(ChannelServer, {:add_client, client_pid})
         {:noreply, %{state | current_port: state.current_port + 1}}
     end
 end

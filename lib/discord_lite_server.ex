@@ -3,7 +3,7 @@ defmodule DiscordLiteServer do
 
   def start(_type, _args) do
     children = [
-      {MainServer, nil},
+      {ChannelServer, nil},
       {ConnectionHandler, nil}
     ]
     Supervisor.start_link(children, strategy: :one_for_one)

@@ -25,7 +25,7 @@ defmodule ClientServer do
         IO.inspect "tcp disconnecting from socket #{inspect socket}"
         :gen_tcp.close socket
         send(state.audio_pid, :disconnect)
-        GenServer.cast(MainServer, {:remove_client, self()})
+        GenServer.cast(ChannelServer, {:remove_client, self()})
         {:stop, :normal, nil}
     end
 
@@ -37,14 +37,14 @@ defmodule ClientServer do
     def handle_info({:tcp_closed, socket}, state) do
         IO.inspect "Socket has been closed with #{inspect socket}"
         send(state.audio_pid, :disconnect)
-        GenServer.cast(MainServer, {:remove_client, self()})
+        GenServer.cast(ChannelServer, {:remove_client, self()})
         {:stop, :normal, nil}
     end
 
     def handle_info({:tcp_error, socket, reason},state) do
         IO.inspect socket,label: "Connection closed with #{inspect socket} due to #{reason}"
         send(state.audio_pid, :disconnect)
-        GenServer.cast(MainServer, {:remove_client, self()})
+        GenServer.cast(ChannelServer, {:remove_client, self()})
         {:stop, :normal, nil}
     end
 end
