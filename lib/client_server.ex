@@ -1,8 +1,8 @@
 defmodule ClientServer do
     use GenServer
 
-    def start_link(port, listen_socket) do
-        GenServer.start_link(__MODULE__, [port, listen_socket], [])
+    def start_link(listen_socket) do
+        GenServer.start_link(__MODULE__, [listen_socket], [])
     end
 
     def init [listen_socket] do
