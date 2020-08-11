@@ -20,4 +20,12 @@ defmodule ConnectionHandler do
         GenServer.cast(ChannelServer, {:add_client, client_pid})
         {:noreply, %{state | current_port: state.current_port + 1}}
     end
+
+    def reset_port() do
+        GenServer.cast(__MODULE__, :reset_port)
+    end
+
+    def handle_cast(:reset_port, state) do
+        {:stop, :normal, nil}
+    end
 end

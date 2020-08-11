@@ -26,6 +26,9 @@ defmodule ChannelServer do
     def handle_cast({:remove_client, pid}, state) do
         IO.inspect("Removing client")
         IO.inspect(state.clients |> List.delete(pid))
+        if ((state.clients |> List.delete(pid)) == []) do
+            ConnectionHandler.reset_port()
+        end
         {:noreply, %{state | clients: state.clients |> List.delete(pid)}}
     end
 
