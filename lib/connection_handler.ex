@@ -20,7 +20,6 @@ defmodule ConnectionHandler do
 
     def handle_info(:start_accepting, state) do
         {:ok, client_pid} = ClientServer.start_link(state.current_port, state.listen_socket)
-        send(self(), :start_accepting)
         GenServer.cast(ChannelServer, {:add_client, client_pid})
         {:noreply, %{state | current_port: state.current_port + 1}}
     end
@@ -30,6 +29,7 @@ defmodule ConnectionHandler do
     end
 
     def handle_cast(:reset_port, state) do
-        {:noreply, %{state | current_port: (@conf[:port] || 11000) + 1}}
+        IO.inspect("Resetting audio port to #{((@conf[:port] || 11000) + 1)}")
+        {:noreply, %{state | current_port: ((@conf[:port] || 11000) + 1)}}
     end
 end
