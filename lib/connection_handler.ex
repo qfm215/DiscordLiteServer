@@ -14,6 +14,10 @@ defmodule ConnectionHandler do
         {:ok, %{listen_socket: listen_socket, current_port: port + 1}}
     end
 
+    def start_accepting() do
+        send(__MODULE__, :start_accepting)
+    end
+
     def handle_info(:start_accepting, state) do
         {:ok, client_pid} = ClientServer.start_link(state.current_port, state.listen_socket)
         send(self(), :start_accepting)
@@ -26,6 +30,6 @@ defmodule ConnectionHandler do
     end
 
     def handle_cast(:reset_port, state) do
-        {:stop, :normal, nil}
+        {:noreply, %{state | current_port: (@conf[:port] || 11000) + 1}}
     end
 end

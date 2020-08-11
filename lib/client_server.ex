@@ -7,6 +7,7 @@ defmodule ClientServer do
 
     def init [port, listen_socket] do
         {:ok, socket} = :gen_tcp.accept listen_socket
+        ConnectionHandler.start_accepting
         {:ok, audio_pid} = AudioServer.start_link(port)
         :gen_tcp.send socket, <<port::little-signed-32>>
         {:ok, %{port: port, audio_pid: audio_pid}}
