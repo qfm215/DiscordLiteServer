@@ -19,9 +19,16 @@ defmodule ConnectionHandler do
     end
 
     def handle_info(:start_accepting, state) do
-        {:ok, client_pid} = ClientServer.start_link(state.current_port, state.listen_socket)
-        GenServer.cast(ChannelServer, {:add_client, client_pid})
+        spawn fn -> {:ok, client_pid} = ClientServer.start_link(state.listen_socket) end
         {:noreply, %{state | current_port: state.current_port + 1}}
+    end
+
+    def get_current_port() do
+        GenServer.call(__MODULE__, :get_current_port)
+    end
+
+    def handle_call(:get_current_port, _from, state) do
+        {:reply, state.current_port, state}
     end
 
     def reset_port() do

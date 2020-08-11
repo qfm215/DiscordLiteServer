@@ -5,9 +5,11 @@ defmodule ClientServer do
         GenServer.start_link(__MODULE__, [port, listen_socket], [])
     end
 
-    def init [port, listen_socket] do
+    def init [listen_socket] do
         {:ok, socket} = :gen_tcp.accept listen_socket
-        ConnectionHandler.start_accepting
+        GenServer.cast(ChannelServer, {:add_client, self()})
+        port = ConnectionHandler.get_current_port()
+        ConnectionHandler.start_accepting()
         {:ok, audio_pid} = AudioServer.start_link(port)
         :gen_tcp.send socket, <<port::little-signed-32>>
         {:ok, %{port: port, audio_pid: audio_pid}}
